@@ -2,6 +2,7 @@ package com.marlon.controller;
 
 import com.marlon.environment.InstanceInformationService;
 import com.marlon.model.Book;
+import com.marlon.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,9 @@ public class BookController {
     @Autowired
     private InstanceInformationService informationService;
 
+    @Autowired
+    private BookRepository repository;
+
     // http://localhost:8100/book-service/1/BRL
    @GetMapping(value = "/{id}/{currency}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Book findBook(
@@ -25,14 +29,11 @@ public class BookController {
             @PathVariable("currency") String currency
    ) {
         String port = informationService.retrieveServerPort();
-        return new Book(
-                1L,
-                "Albert Camus",
-                "Le Premier Homme (O Primeiro Homem)",
-                new Date(),
-                15.8,
-                "BRL",
-                port
-        );
+
+        var book = repository.findById(id).orElseThrow(() -> new RuntimeException("Book not found."));
+        book.setEnvironment(port);
+        book.setCurrency(currency);
+        
+        return book;
     }
 }
