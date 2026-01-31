@@ -34,6 +34,9 @@ public class Book implements Serializable {
     @Transient
     private String environment;
 
+    @Transient
+    private String message = "Success";
+
     public Book() {
     }
 
@@ -46,6 +49,16 @@ public class Book implements Serializable {
         this.price = price;
         this.currency = currency;
         this.environment = environment;
+    }
+
+    public Book(String environment, String message) {
+        this.id = 0L;
+        this.author = "";
+        this.title = "";
+        this.price = 0D;
+        this.currency = "";
+        this.environment = environment;
+        this.message = message;
     }
 
     public Long getId() {
@@ -102,6 +115,14 @@ public class Book implements Serializable {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
